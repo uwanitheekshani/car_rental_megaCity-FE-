@@ -1,0 +1,39 @@
+body {
+  background-color: #f8f9fa;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  margin-bottom: 15px;
+}
+
+/* Set the background of the home page to be empty (white) */
+.home-container {
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px; /* Adjust this value to push the navbar down */
+}
+
+/* Customize navbar */
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+/* Make the navbar's position more dynamic if needed */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* Default background for the rest of the pages */
+}
