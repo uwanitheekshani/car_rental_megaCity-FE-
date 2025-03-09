@@ -42,19 +42,29 @@ const LoginForm = () => {
             const response = await loginUser({ email, password });
             if (response && response.token) {
                 localStorage.setItem('token', response.token);  // Store the token in localStorage
-    
+                
                 // Decode the token to extract the role
                 const decodedToken = jwtDecode(response.token);
                 console.log("Decoded Token:", decodedToken);  // Log the decoded token to inspect it
-    
+
+                if (decodedToken.hasOwnProperty('userId')) {
+                    const userId = decodedToken.userId;  // Extract userId
+                    localStorage.setItem('userId', userId); // Store userId in localStorage
+                    console.log("User ID:", userId);
+                } else {
+                    console.error("User ID not found in token");
+                }
                 // Ensure the token contains the 'role' key
                 if (decodedToken.hasOwnProperty('role')) {
                     const role = decodedToken.role;  // Extract the role from the decoded token
                     console.log("User Role:", role);  // Log the role
     
+                    
+                    
+
                     // Redirect based on the role
                     if (role === 'customer') {
-                        navigate('/home');
+                        navigate('/cars');
                     } else if (role === 'admin') {
                         navigate('/admin-dashboard');
                     } else if (role === 'driver') {
