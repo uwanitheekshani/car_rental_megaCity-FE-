@@ -9,6 +9,9 @@ import VerifyOtp from './components/Login/VerifyOtp';
 import ResetPassword from './components/Login/ResetPassword';
 import CarList from './components/Car/CarList';
 import BookingForm from './components/Booking/BookingForm';
+import PaymentsPage from './components/Booking/PaymentsPage';
+import AdminDashboard from './components/Admin/AdminDashboard';
+import CarsAdmin from './components/Admin/CarsAdmin';
 
 function App() {
   return (
@@ -26,7 +29,9 @@ function App() {
           <Route path="/cars" element={<CarList/>} />
           {/* <Route path="/bookings" element={<BookingForm/>} /> */}
           <Route path="/bookings/:id" element={<BookingForm/>}  />
-          {/* <Route path="/payments" element={<PaymentsPage />} /> */}
+          <Route path="/payments" element={<PaymentsPage/>} />
+          <Route path="/admin-dashboard" element={<AdminDashboard/>} />
+          <Route path="/admin-dashboard/cars" element={<CarsAdmin/>} />
         </Routes>
       </div>
     </Router>

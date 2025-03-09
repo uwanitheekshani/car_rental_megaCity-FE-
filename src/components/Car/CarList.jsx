@@ -110,6 +110,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Import .jpeg images from the assets folder
 
@@ -125,6 +126,7 @@ import image4 from '../../assets/images/car-8.jpg';
 
 const CarList = () => {
     const [cars, setCars] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch all cars from the backend
