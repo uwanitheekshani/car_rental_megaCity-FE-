@@ -100,6 +100,30 @@ const MyBookings = () => {
         fetchBookings();
     }, [userId]);
 
+     const handleUpdateStatus = async (id, newStatus) => {
+            try {
+                const response = await axios.put(
+                    `http://localhost:8080/MegaCity_war_exploded/booking?id=${id}&action=updateStatus&status=${newStatus}`
+                );
+        
+                if (response.data === "Booking Status Updated Successfully") {
+                    alert(`Booking ${newStatus} successfully!`);
+        
+                    // Update the state immediately
+                    setBookings((prevBookings) =>
+                        prevBookings.map((booking) =>
+                            booking.id === id ? { ...booking, status: newStatus } : booking
+                        )
+                    );
+                } else {
+                    alert("Failed to update booking!");
+                }
+            } catch (error) {
+                console.error(`Error updating booking to ${newStatus}:`, error);
+                alert(`Error updating booking to ${newStatus}. Check console for details.`);
+            }
+        };
+
     return (
         <div className="container mt-5">
             {/* Title and Refresh Button */}
@@ -129,6 +153,7 @@ const MyBookings = () => {
                             <th>End Date</th>
                             <th>Total Amount</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -142,6 +167,20 @@ const MyBookings = () => {
                                 <td className={booking.status === "Pending" ? "text-warning fw-bold" : "text-success fw-bold"}>
                                     {booking.status}
                                 </td>
+                                <td>
+                                    {booking.status === "pending" && (
+                            <>
+                               
+                                <button 
+                                    className="btn btn-warning btn-sm"
+                                    onClick={() => handleUpdateStatus(booking.id, "cancelled")}
+                                >
+                                    Cancel
+                                </button>
+                            </>
+                        )}
+                            
+                                    </td>
                             </tr>
                         ))}
                     </tbody>

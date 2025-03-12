@@ -11,21 +11,17 @@ const DriverForm = () => {
 
     const userId = localStorage.getItem("userId");
 
-    // useEffect(() => {
-    //     const fetchBookings = async () => {
-    //         try {
-    //             const response = await axios.get(`http://localhost:8080/MegaCity_war_exploded/booking`, {
-    //                 params: { userId }
-    //             });
-    //             setBookings(response.data);
-    //         } catch (error) {
-    //             console.error("Error fetching bookings:", error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //     fetchBookings();
-    // }, [userId]);
+    useEffect(() => {
+        axios.get(`http://localhost:8080/MegaCity_war_exploded/driver?id=${userId}`)
+        .then(response => {
+            setBookings(response.data);
+            // setLoading(false);
+        })
+        .catch(error => {
+            console.error("Error fetching bookings:", error);
+            // setLoading(false);
+        });
+    }, []);
 
     return (
         <div className="container mt-5">
@@ -60,18 +56,20 @@ const DriverForm = () => {
                         </tr>
                     </thead>
                     <tbody>
-                       
-                            <tr >
-                                {/* <td>{index + 1}</td> */}
-                                {/* <td>{booking.carId}</td>
+                    {bookings.map((booking, index) => (
+                            <tr key={booking.id}>
+                                <td>{booking.id}</td>
+                                <td>{booking.userId}</td>
+                                <td>{booking.carId}</td>
                                 <td>{booking.startDate}</td>
                                 <td>{booking.endDate}</td>
                                 <td>RS. {booking.totalAmount}</td>
-                                <td className={booking.status === "Pending" ? "text-warning fw-bold" : "text-success fw-bold"}>
+                                {/* <td className={booking.status === "Pending" ? "text-warning fw-bold" : "text-success fw-bold"}>
                                     {booking.status}
                                 </td> */}
+                                 <td>{booking.status}</td>
                             </tr>
-                       
+                         ))}
                     </tbody>
                 </Table>
             {/* )} */}
