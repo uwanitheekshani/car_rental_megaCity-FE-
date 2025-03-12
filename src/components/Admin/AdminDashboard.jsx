@@ -1,487 +1,3 @@
-// import React, { useState } from "react";
-// import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-// // import CarsAdmin from "./CarsAdmin";
-// // import CarsAdmin from "./CarsAdmin";
-
-// const AdminDashboard = () => {
-//     const [activeSection, setActiveSection] = useState("cars");
-
-//     return (
-//         <Router>
-//             <div className="d-flex">
-//                 {/* Sidebar */}
-//                 <div className="bg-dark text-white vh-100 p-3" style={{ width: "250px" }}>
-//                     <h2 className="text-center">Admin Panel</h2>
-//                     <ul className="nav flex-column">
-//                         <li className="nav-item">
-//                             <Link 
-//                                 className={`nav-link text-white ${activeSection === "cars" ? "active" : ""}`}
-//                                 to="/admin-dashboard/cars"
-//                                 onClick={() => setActiveSection("cars")}
-//                             >
-//                                 🚗 Cars
-//                             </Link>
-//                         </li>
-//                         <li className="nav-item">
-//                             <Link 
-//                                 className={`nav-link text-white ${activeSection === "users" ? "active" : ""}`}
-//                                 to="/users"
-//                                 onClick={() => setActiveSection("users")}
-//                             >
-//                                 👥 Users
-//                             </Link>
-//                         </li>
-//                         <li className="nav-item">
-//                             <Link 
-//                                 className={`nav-link text-white ${activeSection === "payments" ? "active" : ""}`}
-//                                 to="/payments"
-//                                 onClick={() => setActiveSection("payments")}
-//                             >
-//                                 💳 Payments
-//                             </Link>
-//                         </li>
-//                         <li className="nav-item">
-//                             <Link 
-//                                 className={`nav-link text-white ${activeSection === "orders" ? "active" : ""}`}
-//                                 to="/orders"
-//                                 onClick={() => setActiveSection("orders")}
-//                             >
-//                                 📦 Orders
-//                             </Link>
-//                         </li>
-//                     </ul>
-//                 </div>
-
-//                 {/* Main Content */}
-//                 {/* <div className="flex-grow-1 p-4" style={{ width: "100%" }}>
-//                     <Routes>
-//                         <Route path="/admincars" element={<CarsAdmin/>} />
-//                         <Route path="/users" element={<h2>Users Management Coming Soon...</h2>} />
-//                         <Route path="/payments" element={<h2>Payments Management Coming Soon...</h2>} />
-//                         <Route path="/orders" element={<h2>Orders Management Coming Soon...</h2>} />
-//                     </Routes>
-//                 </div> */}
-//             </div>
-//         </Router>
-//     );
-// };
-
-// export default AdminDashboard;
-
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-
-// const AdminDashboard = () => {
-//   return (
-//     <div className="admin-dashboard">
-//       <div className="sidebar">
-//         <ul>
-//           <li><Link to="/admin-dashboard/cars">Cars</Link></li>
-//           <li><Link to="/admin/users">Users</Link></li>
-//           <li><Link to="/admin/payments">Payments</Link></li>
-//           <li><Link to="/admin/orders">Orders</Link></li>
-//         </ul>
-//       </div>
-//       <div className="content">
-//         <h2>Admin Dashboard</h2>
-//         <div>
-//           <h3>Car Management</h3>
-//           <Link to="/admin/cars">Manage Cars</Link>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default AdminDashboard;
-
-
-
-// import React, { useState } from 'react';
-// import { Link, Route, Routes } from 'react-router-dom';
-// import CarsAdmin from './CarsAdmin';
-
-// // import 
-
-// // import CarSection from './CarSection'; // Assuming you have the CarSection component
-
-// const AdminDashboard = () => {
-//   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-//   const toggleSidebar = () => {
-//     setIsSidebarOpen(!isSidebarOpen);
-//   };
-
-//   return (
-//     <div className="admin-dashboard">
-//       <div className={`sidebar ${isSidebarOpen ? '' : 'closed'}`}>
-//         <ul>
-//           <li><Link to="/admin-dashboard/cars">Cars</Link></li>
-//           <li><Link to="/admin/users">Users</Link></li>
-//           <li><Link to="/admin/payments">Payments</Link></li>
-//           <li><Link to="/admin/orders">Orders</Link></li>
-//         </ul>
-//       </div>
-//       <div className="content">
-//         <button className="sidebar-toggle" onClick={toggleSidebar}>
-//           {isSidebarOpen ? 'Close Sidebar' : 'Open Sidebar'}
-//         </button>
-//         <h2>Admin Dashboard</h2>
-//         <Routes>
-//           <Route path="/cars" element={<CarsAdmin/>} />
-//           {/* Other routes for users, payments, orders */}
-//         </Routes>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
-
-
-// import React, {useEffect, useState } from "react";
-// import axios from "axios";
-// import { Link } from "react-router-dom";
-// import { FaCar, FaUser, FaCogs } from 'react-icons/fa';
-// import { Button, Modal, Form } from "react-bootstrap";
-
-// const AdminDashboard = () => {
-//     const [cars, setCars] = useState([]);
-
-
-//     const [car, setCar] = useState({
-//         name: "",
-//         model: "",
-//         plate_number: "",
-//         year: "",
-//         status: "Available",
-//     });
-
-//     const [driver, setDriver] = useState({
-//         name: "",
-//         licenseNumber: "",
-//         status: "",
-//     });
-
-//     const [activeTab, setActiveTab] = useState("car");
-
-//     const handleCarChange = (e) => {
-//         const { name, value } = e.target;
-//         setCar({ ...car, [name]: value });
-//     };
-
-//     const handleDriverChange = (e) => {
-//         const { name, value } = e.target;
-//         setDriver({ ...driver, [name]: value });
-//     };
-
-//     useEffect(() => {
-//         // Fetch all cars when the component is mounted
-//         fetchCars();
-//       }, []);
-    
-//       const fetchCars = async () => {
-//         try {
-//           const response = await axios.get("http://localhost:8080/MegaCity_war_exploded/uploadCarWithImage");
-//           setCars(response.data);
-//         } catch (error) {
-//           console.error("Error fetching cars:", error);
-//         }
-//       };
-
-//     const addCar = async (e) => {
-
-//         e.preventDefault();
-        
-
-//         const formData = new FormData();
-//         formData.append("name", car.name);
-//         formData.append("model", car.model);
-//         formData.append("plate_number", car.plate_number);
-//         formData.append("year", car.year);
-//         formData.append("status", car.status);
-    
-//         // If there's an image file
-//         // if (selectedImage) {
-//         //     formData.append("image", selectedImage);
-//         // }
-    
-//         try {
-//             const response = await axios.post("http://localhost:8080/MegaCity_war_exploded/uploadCarWithImage", formData, {
-//                 headers: {
-//                     "Content-Type": "multipart/form-data",
-//                 },
-//             });
-    
-//             alert("Car added successfully!");
-//             setCar({
-//                 name: "",
-//                 model: "",
-//                 plate_number: "",
-//                 year: "",
-//                 status: "",
-//             });
-//             // setSelectedImage(null);  // Clear the selected image
-//         } catch (error) {
-//             console.error("There was an error adding the car:", error);
-//             alert("Failed to add car!");
-//         }
-
-//     };
-
-    
-
-//     const addDriver = async (e) => {
-//         e.preventDefault();
-//         try {
-//             const response = await axios.post(
-//                 "http://localhost:8080/admin/addDriver",
-//                 driver
-//             );
-//             alert("Driver added successfully!");
-//             setDriver({
-//                 name: "",
-//                 licenseNumber: "",
-//                 status: "",
-//             });
-//         } catch (error) {
-//             console.error("There was an error adding the driver:", error);
-//         }
-//     };
-
-//     return (
-//         <div className="d-flex" id="wrapper">
-//             {/* Left Sidebar */}
-//             <div className="bg-dark text-white p-4" id="sidebar" style={{ width: '250px' }}>
-//                 <h4 className="text-center mb-4">Admin Dashboard</h4>
-//                 <ul className="nav flex-column">
-//                     <li className="nav-item">
-//                         <Link to="/admin" className="nav-link text-white">
-//                             <FaCogs className="me-2" />
-//                             Dashboard
-//                         </Link>
-//                     </li>
-//                     <li className="nav-item">
-//                         <Link 
-//                            // to="/admin/addCar" 
-//                             className={`nav-link text-white ${activeTab === "car" ? "active" : ""}`}
-//                             onClick={() => setActiveTab("car")}
-//                         >
-//                             <FaCar className="me-2" />
-//                             Add Car
-//                         </Link>
-//                     </li>
-//                     <li className="nav-item">
-//                         <Link 
-//                            // to="/admin/addDriver" 
-//                             className={`nav-link text-white ${activeTab === "driver" ? "active" : ""}`}
-//                             onClick={() => setActiveTab("driver")}
-//                         >
-//                             <FaUser className="me-2" />
-//                             Add Driver
-//                         </Link>
-//                     </li>
-//                     <li className="nav-item">
-//                         <Link to="/admin/viewCars" className="nav-link text-white">
-//                             View Cars
-//                         </Link>
-//                     </li>
-//                     <li className="nav-item">
-//                         <Link to="/admin/viewDrivers" className="nav-link text-white">
-//                             View Drivers
-//                         </Link>
-//                     </li>
-//                 </ul>
-//             </div>
-
-//             {/* Page Content */}
-//             <div id="page-content-wrapper" className="container-fluid p-4">
-//                 <h2 className="text-center mb-4">Admin Dashboard</h2>
-
-
-// {activeTab === "car" && (
-//   <div className="container mt-4">
-//  <Button variant="primary" onClick={() => handleShowModal()}>+ Add Car</Button>
-//     <div className="card shadow-sm mb-4" style={{ maxWidth: "600px", margin: "0 auto" }}>
-//       <div className="card-header bg-primary text-white">
-//         <h5>Add New Car</h5>
-//       </div>
-//       <div className="card-body">
-//         <form onSubmit={addCar}>
-//           <div className="mb-3">
-//             <label className="form-label">Car Name</label>
-//             <input
-//               type="text"
-//               className="form-control"
-//               name="name"
-//               value={car.name}
-//               onChange={handleCarChange}
-//               required
-//             />
-//           </div>
-//           <div className="mb-3">
-//             <label className="form-label">Model</label>
-//             <input
-//               type="text"
-//               className="form-control"
-//               name="model"
-//               value={car.model}
-//               onChange={handleCarChange}
-//               required
-//             />
-//           </div>
-//           <div className="mb-3">
-//             <label className="form-label">Plate Number</label>
-//             <input
-//               type="text"
-//               className="form-control"
-//               name="plate_number"
-//               value={car.plate_number}
-//               onChange={handleCarChange}
-//               required
-//             />
-//           </div>
-//           <div className="mb-3">
-//             <label className="form-label">Year</label>
-//             <input
-//               type="number"
-//               className="form-control"
-//               name="year"
-//               value={car.year}
-//               onChange={handleCarChange}
-//               required
-//             />
-//           </div>
-//           <div className="mb-3">
-//             <label className="form-label">Status</label>
-//             <select
-//               className="form-select"
-//               name="status"
-//               value={car.status}
-//               onChange={handleCarChange}
-//               required
-//             >
-//               <option value="">Select Status</option>
-//               <option value="Available">Available</option>
-//               <option value="Unavailable">Unavailable</option>
-//             </select>
-//           </div>
-//           <button type="submit" className="btn btn-success w-100">
-//             Add Car
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//     {/* </div> */}
-//     {/* Table to Display Cars */}
-//     {/* <div className="col-6"> */}
-//     <div className="card shadow-sm mt-4">
-//       <div className="card-header bg-info text-white">
-//         <h5>Cars List</h5>
-//       </div>
-//       <div className="card-body">
-//         <table className="table table-bordered">
-//           <thead>
-//             <tr>
-//               {/* <th>ID</th> */}
-//               <th>Name</th>
-//               <th>Model</th>
-//               <th>Plate Number</th>
-//               <th>Year</th>
-//               <th>Status</th>
-//               <th>Actions</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {cars.length > 0 ? (
-//               cars.map((cardet, index) => (
-//                 <tr key={index}>
-//                   {/* <td>{index + 1}</td> */}
-//                   <td>{cardet.name}</td>
-//                   <td>{cardet.model}</td>
-//                   <td>{cardet.plate_number}</td>
-//                   <td>{cardet.year}</td>
-//                   <td>{cardet.status}</td>
-//                   <td>
-//                     <button className="btn btn-warning btn-sm" onClick={() => handleEdit(cardet)}>Edit</button>
-//                     <button className="btn btn-danger btn-sm ms-2" onClick={() => handleDelete(cardet.id)}>Delete</button>
-//                   </td>
-//                 </tr>
-//               ))
-//             ) : (
-//               <tr>
-//                 <td colSpan="7" className="text-center">No cars added yet.</td>
-//               </tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//     {/* </div> */}
-//     {/* </div> */}
-//   </div>
-// )}
-
-
-//                 {activeTab === "driver" && (
-//                     <div className="card shadow-sm mb-4">
-//                         <div className="card-header bg-primary text-white">
-//                             <h5>Add New Driver</h5>
-//                         </div>
-//                         <div className="card-body">
-//                             <form onSubmit={addDriver}>
-//                                 <div className="mb-3">
-//                                     <label className="form-label">Driver Name</label>
-//                                     <input
-//                                         type="text"
-//                                         className="form-control"
-//                                         name="name"
-//                                         value={driver.name}
-//                                         onChange={handleDriverChange}
-//                                         required
-//                                     />
-//                                 </div>
-//                                 <div className="mb-3">
-//                                     <label className="form-label">License Number</label>
-//                                     <input
-//                                         type="text"
-//                                         className="form-control"
-//                                         name="licenseNumber"
-//                                         value={driver.licenseNumber}
-//                                         onChange={handleDriverChange}
-//                                         required
-//                                     />
-//                                 </div>
-//                                 <div className="mb-3">
-//                                     <label className="form-label">Status</label>
-//                                     <select
-//                                         className="form-select"
-//                                         name="status"
-//                                         value={driver.status}
-//                                         onChange={handleDriverChange}
-//                                         required
-//                                     >
-//                                         <option value="">Select Status</option>
-//                                         <option value="Active">Active</option>
-//                                         <option value="Inactive">Inactive</option>
-//                                     </select>
-//                                 </div>
-//                                 <button type="submit" className="btn btn-success w-100">
-//                                     Add Driver
-//                                 </button>
-//                             </form>
-//                         </div>
-//                     </div>
-//                 )}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default AdminDashboard;
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -496,7 +12,11 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [selectedRole, setSelectedRole] = useState("");
     const [selectedStatus, setSelectedStatus] = useState(""); // Status filter
-        const [selectedModel, setSelectedModel] = useState(""); // Model filter
+    const [selectedModel, setSelectedModel] = useState(""); // Model filter
+    const [bookings, setBookings] = useState([]);
+    const [paymentFilter, setPaymentFilter] = useState("paid");
+    const [payments, setPayments] = useState([]);
+
 
     const [car, setCar] = useState({
         name: "",
@@ -517,6 +37,8 @@ const AdminDashboard = () => {
     useEffect(() => {
         fetchCars();
         fetchUsers();
+        fetchBookings();
+        fetchPayments();
     }, []);
 
     const fetchCars = async () => {
@@ -534,6 +56,31 @@ const AdminDashboard = () => {
             setUsers(response.data);
         } catch (error) {
             console.error("Error fetching users:", error);
+        }
+    };
+
+    const fetchBookings = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/MegaCity_war_exploded/booking");
+            setBookings(response.data);
+            console.log(bookings);
+            
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+        }
+    };
+// `http://localhost:8080/MegaCity_war_exploded/booking?id=${id}`
+    const fetchPayments = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/MegaCity_war_exploded/payment", {
+                params: {
+                    action: "getAll"  // Add the action parameter
+                }
+            });
+    
+            setPayments(response.data);
+        } catch (error) {
+            console.error("Error fetching payments:", error);
         }
     };
 
@@ -646,17 +193,30 @@ const AdminDashboard = () => {
     
 
     const handleDelete = async (id, type) => {
-        const url = type === "car" ? `http://localhost:8080/MegaCity_war_exploded/uploadCarWithImage?carId=${id}` : `http://localhost:8080/MegaCity_war_exploded/users/${id}`;
+        let url;
+    
+        if (type === "car") {
+            url = `http://localhost:8080/MegaCity_war_exploded/uploadCarWithImage?carId=${id}`;
+        } else if (type === "user") {
+            url = `http://localhost:8080/MegaCity_war_exploded/users/${id}`;
+        } else if (type === "booking") {
+            url = `http://localhost:8080/MegaCity_war_exploded/booking?id=${id}`;
+        }
+    
         try {
             await axios.delete(url);
             alert(`${type} deleted successfully!`);
+    
             if (type === "car") fetchCars();
-            else fetchUsers();
+            else if (type === "user") fetchUsers();
+            else if (type === "booking") fetchBookings();
         } catch (error) {
             console.error(`Error deleting ${type}:`, error);
             alert(`Failed to delete ${type}!`);
         }
     };
+    
+    
 
     const handleEdit = (data, type) => {
         if (type === "car") {
@@ -709,6 +269,57 @@ const AdminDashboard = () => {
     };
 
 
+    // const handleUpdateStatus = async (id, newStatus) => {
+    //     try {
+    //         const response = await axios.put(`http://localhost:8080/MegaCity_war_exploded/booking?id=${id}`, {
+    //             action:"updateStatus",
+    //             status: newStatus
+                
+    //         });
+    
+    //         if (response.data === "Booking Updated Successfully") {
+    //             alert(`Booking ${newStatus} successfully!`);
+    
+    //             // Update the state immediately
+    //             setBookings((prevBookings) => 
+    //                 prevBookings.map((booking) => 
+    //                     booking.id === id ? { ...booking, status: newStatus } : booking
+    //                 )
+    //             );
+    //         } else {
+    //             alert("Failed to update booking!");
+    //         }
+    //     } catch (error) {
+    //         console.error(`Error updating booking to ${newStatus}:`, error);
+    //         alert(`Error updating booking to ${newStatus}. Check console for details.`);
+    //     }
+    // };
+
+    const handleUpdateStatus = async (id, newStatus) => {
+        try {
+            const response = await axios.put(
+                `http://localhost:8080/MegaCity_war_exploded/booking?id=${id}&action=updateStatus&status=${newStatus}`
+            );
+    
+            if (response.data === "Booking Status Updated Successfully") {
+                alert(`Booking ${newStatus} successfully!`);
+    
+                // Update the state immediately
+                setBookings((prevBookings) =>
+                    prevBookings.map((booking) =>
+                        booking.id === id ? { ...booking, status: newStatus } : booking
+                    )
+                );
+            } else {
+                alert("Failed to update booking!");
+            }
+        } catch (error) {
+            console.error(`Error updating booking to ${newStatus}:`, error);
+            alert(`Error updating booking to ${newStatus}. Check console for details.`);
+        }
+    };
+    
+
     return (
         <div className="d-flex" id="wrapper">
             <div className="bg-dark text-white p-4" id="sidebar" style={{ width: '250px' }}>
@@ -741,100 +352,30 @@ const AdminDashboard = () => {
                         </Link>
                     </li>
 
+                    <li className="nav-item">
+                           <Link 
+                           // to="/admin/addDriver" 
+                            className={`nav-link text-white ${activeTab === "booking" ? "active" : ""}`}
+                            onClick={() => setActiveTab("booking")}
+                        >
+                            <FaUser className="me-2" />
+                            Manage Bookings
+                        </Link>
+                    </li>
+
+                    <li className="nav-item">
+                           <Link 
+                           // to="/admin/addDriver" 
+                            className={`nav-link text-white ${activeTab === "payment" ? "active" : ""}`}
+                            onClick={() => setActiveTab("payment")}
+                        >
+                            <FaUser className="me-2" />
+                            View Payments
+                        </Link>
+                    </li>
                     
                 </ul>
             </div>
-            {/* {activeTab === "car" && (
-            <div id="page-content-wrapper" className="container-fluid p-4">
-                <h2 className="text-center mb-4">Admin Dashboard</h2>
-                <div className="card shadow-sm mt-4">
-                    <div className="card-header bg-info text-white">
-                        <h5>Cars List</h5>
-                    </div>
-                    <div className="row mb-5">
-                    <div className="col-md-2 mt-3 ml-3">
-                    <Button variant="primary" style={{ width: "150px"}} onClick={() => setShowModal(true)}>
-                     + Add Car
-                    </Button>
-                </div>
-                <div className="col-md-3 mt-3">
-                <select 
-                        className="form-select" 
-                        value={selectedStatus} 
-                        onChange={(e) => setSelectedStatus(e.target.value)}
-                    >
-                        <option value="">All Status</option>
-                        <option value="Available">Available</option>
-                        <option value="Unavailable">Unavailable</option>
-                    </select>
-                </div>
-                <div className="col-md-3 mt-3">
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        placeholder="Filter by Model..." 
-                        value={selectedModel}
-                        onChange={(e) => setSelectedModel(e.target.value)}
-                    />
-                </div>
-                <div className="col-md-2 mt-3">
-                    <button className="btn btn-primary w-100" onClick={handleCarFilterChange}>
-                        Apply Filters
-                    </button>
-                </div>
-                <div className="col-md-2 mt-3">
-                    <button 
-                        className="btn btn-secondary w-100" 
-                        onClick={() => {
-                            setSelectedStatus("");
-                            setSelectedModel("");
-                            handleCarFilterChange();
-                        }}
-                    >
-                        Clear Filters
-                    </button>
-                </div>
-                </div>
-                    <div className="card-body">
-                        
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Model</th>
-                                    <th>Plate Number</th>
-                                    <th>Year</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {cars.length > 0 ? cars.map((cardet, index) => (
-                                    <tr key={index}>
-                                        <td>{cardet.name}</td>
-                                        <td>{cardet.model}</td>
-                                        <td>{cardet.plate_number}</td>
-                                        <td>{cardet.year}</td>
-                                        <td>{cardet.status}</td>
-                                        
-                                          <td>
-                                        <button className="btn btn-warning btn-sm" onClick={() => handleEdit(cardet, "car")}>Edit</button>
-                                        <button className="btn btn-danger btn-sm ms-2" onClick={() => handleDelete(cardet.id, "car")}>Delete</button>
-                                    </td>
-                                    </tr>
-                                )) : (
-                                    <tr>
-                                        <td colSpan="5" className="text-center">No cars added yet.</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            )} */}
-
-
 
 {activeTab === "car" && (
                 <div id="page-content-wrapper" className="container-fluid p-4">
@@ -989,6 +530,235 @@ const AdminDashboard = () => {
                     </table>
                 </div>
             )}
+
+{activeTab === "booking" && (
+                <div id="page-content-wrapper" className="container-fluid p-4">
+                    <h2 className="text-center mb-4">Manage Bookings</h2>
+                    {/* <div className="row mb-3">
+                 
+                    <div className="col-md-4">
+                    <select 
+                        className="form-select" 
+                        value={selectedRole} 
+                        onChange={(e) => setSelectedRole(e.target.value)}
+                    >
+                        <option value="">All Roles</option>
+                        <option value="customer">customer</option>
+                        <option value="driver">driver</option>
+                    </select>
+                </div>
+                <div className="col-md-2">
+                    <button className="btn btn-primary w-100" onClick={handleFilterChange}>
+                        Apply Filters
+                    </button>
+                </div>
+                <div className="col-md-2">
+                    <button 
+                        className="btn btn-secondary w-100" 
+                        onClick={() => {
+                            setSelectedRole("");
+                            handleFilterChange();
+                        }}
+                    >
+                        Clear Filters
+                    </button>
+                </div>
+                </div> */}
+                    <table className="table table-bordered mt-4">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>User ID</th>
+                                <th>Car ID</th>
+                                <th>Driver ID</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th style={{ width: "220px" }}>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {bookings.length > 0 ? bookings.map((booking) => (
+                                <tr key={booking.id}>
+                                    <td>{booking.id}</td>
+                                    <td>{booking.userId}</td>
+                                    <td>{booking.carId}</td>
+                                    <td>{booking.driverId}</td>
+                                    <td>{booking.startDate}</td>
+                                    <td>{booking.endDate}</td>
+                                    <td>{booking.totalAmount}</td>
+                                    <td>{booking.status}</td>
+                                    <td>
+                                    {booking.status === "pending" && (
+                            <>
+                                <button 
+                                    className="btn btn-success btn-sm me-2"
+                                    onClick={() => handleUpdateStatus(booking.id, "confirmed")}
+                                >
+                                    Confirm
+                                </button>
+                                <button 
+                                    className="btn btn-warning btn-sm"
+                                    onClick={() => handleUpdateStatus(booking.id, "cancelled")}
+                                >
+                                    Cancel
+                                </button>
+                            </>
+                        )}
+                                        <button className="btn btn-danger btn-sm ms-2" onClick={() => handleDelete(booking.id, "booking")}>Delete</button>
+                                    </td>
+                                </tr>
+                            )) : (
+                                <tr><td colSpan="5" className="text-center">No bookings added yet.</td></tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+
+{activeTab === "payment" && (
+    <div id="page-content-wrapper" className="container-fluid p-4">
+        <h2 className="text-center mb-4">View Payments</h2>
+        {/* <div className="row mb-3">
+            <div className="col-md-6">
+               
+                <div>
+                    <label>
+                        <input 
+                            type="radio" 
+                            name="paymentFilter" 
+                            value="pending" 
+                            checked={paymentFilter === "pending"} 
+                            onChange={() => setPaymentFilter("pending")} 
+                        />
+                        Pending Payments
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input 
+                            type="radio" 
+                            name="paymentFilter" 
+                            value="paid" 
+                            checked={paymentFilter === "paid"} 
+                            onChange={() => setPaymentFilter("paid")} 
+                        />
+                        Paid Payments
+                    </label>
+                </div>
+            </div>
+        </div> */}
+
+<div className="row mb-3">
+    <div className="col-md-6 d-flex justify-content-start align-items-center">
+        <div className="form-check form-check-inline">
+            <input
+                className="form-check-input"
+                type="radio"
+                name="paymentFilter"
+                value="pending"
+                checked={paymentFilter === "pending"}
+                onChange={() => setPaymentFilter("pending")}
+                id="pendingRadio"
+            />
+            <label className="form-check-label" htmlFor="pendingRadio">
+                Pending Payments
+            </label>
+        </div>
+
+        <div className="form-check form-check-inline ms-4">
+            <input
+                className="form-check-input"
+                type="radio"
+                name="paymentFilter"
+                value="paid"
+                checked={paymentFilter === "paid"}
+                onChange={() => setPaymentFilter("paid")}
+                id="paidRadio"
+            />
+            <label className="form-check-label" htmlFor="paidRadio">
+                Paid Payments
+            </label>
+        </div>
+    </div>
+</div>
+
+        
+
+        {paymentFilter === "pending" && (
+            <table className="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>User ID</th>
+                        <th>Car ID</th>
+                        <th>Driver ID</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {bookings.length > 0 ? bookings
+                .filter(booking => booking.status === "pending")  // Filter bookings with status "pending"
+                .map((booking) => (
+                <tr key={booking.id}>
+                        <td>{booking.id}</td>
+                        <td>{booking.userId}</td>
+                        <td>{booking.carId}</td>
+                        <td>{booking.driverId}</td>
+                        <td>{booking.startDate}</td>
+                        <td>{booking.endDate}</td>
+                        <td>{booking.totalAmount}</td>
+                        <td>{booking.status}</td>
+                        </tr>
+                    )) : (
+                        <tr><td colSpan="5" className="text-center">No pending payments found.</td></tr>
+                    )}
+                </tbody>
+            </table>
+        )}
+
+        {paymentFilter === "paid" && (
+            <table className="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Booking ID</th>
+                        <th>User ID</th>
+                        <th>Payment Amount</th>
+                        <th>Currency</th>
+                        <th>Payment Method</th>
+                        <th>Payment Date</th>
+                        <th>Payment Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {payments.length > 0 ? payments.map((payment) => (
+                <tr key={payment.id}>
+                            <td>{payment.id}</td>
+                            <td>{payment.bookingId}</td>
+                            <td>{payment.userId}</td>
+                            <td>{payment.paymentAmount}</td>
+                            <td>{payment.currency}</td>
+                            <td>{payment.paymentMethod}</td>
+                            <td>{payment.paymentDate}</td>
+                            <td>{payment.paymentStatus}</td>
+                        </tr>
+                    )) : (
+                        <tr><td colSpan="5" className="text-center">No paid payments found.</td></tr>
+                    )}
+                </tbody>
+            </table>
+        )}
+    </div>
+)}
+
+
+
            <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{car.id ? "Update Car" : "Add New Car"}</Modal.Title>

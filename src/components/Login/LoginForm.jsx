@@ -68,7 +68,7 @@ const LoginForm = () => {
                     } else if (role === 'admin') {
                         navigate('/admin-dashboard');
                     } else if (role === 'driver') {
-                        navigate('/driver-dashboard');
+                        navigate('/driver');
                     } else {
                         setErrorMessage('Invalid role');
                     }

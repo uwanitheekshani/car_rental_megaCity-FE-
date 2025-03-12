@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { jwtDecode } from 'jwt-decode';
 // Import .jpeg images from the assets folder
 
 import image5 from '../../assets/images/car-1.jpg';
@@ -22,6 +22,23 @@ const CarList = () => {
     // const [filteredCars, setFilteredCars] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState(""); // Status filter
     const [selectedModel, setSelectedModel] = useState(""); // Model filter
+
+    const token = localStorage.getItem("token");
+   // const token = localStorage.getItem("token");
+    let userRole = null;
+    let userId = null;
+
+    if (token) {
+        try {
+            const decodedToken = jwtDecode(token);
+            userRole = decodedToken.role; // Extract role
+            userId = decodedToken.userId; // Extract user ID (if exists)
+            console.log("User Role:", userRole, "User ID:", userId);
+        } catch (error) {
+            console.error("Invalid token:", error);
+        }
+    }
+    
 
     useEffect(() => {
         // Fetch all cars from the backend
@@ -97,11 +114,22 @@ const CarList = () => {
 
     return (
         <div className="container mt-5">
-            <div className="d-flex justify-content-end">
+            
+            {/* <div className="d-flex justify-content-end">
                 <button className="btn btn-success" onClick={() => navigate("/payments")}>
                     💳 View & Pay Bookings
                 </button>
-            </div>
+            </div> */}
+            {token && userId && userRole === "customer" && (
+             <div className="d-flex justify-content-between mb-3">
+            <button className="btn btn-outline-primary" onClick={() => navigate("/my-bookings")}>
+                📅 View My Bookings
+            </button>
+            <button className="btn btn-success" onClick={() => navigate("/payments")}>
+                💳 View & Pay Bookings
+            </button>
+        </div>
+        )}
             <h2 className="text-center mb-4">🚗 Available Cars for Rent</h2>
 
 
@@ -167,6 +195,7 @@ const CarList = () => {
                                     {car.status}
                                 </p>
 
+                                {token && userId && userRole === "customer" && (
                                 <Link to={`/bookings/${car.id}`} state={{ carImageUrl: car.imageUrl, carName: car.name, carPrice: 5000 }}
                                     className={`btn w-100 fw-bold ${car.status !== "Available" ? "btn-secondary disabled" : "btn-primary"}`}
                                     aria-disabled={car.status !== "Available"}
@@ -174,6 +203,7 @@ const CarList = () => {
                                 >
                                     {car.status === "Available" ? "Book Now" : "Unavailable"}
                                 </Link>
+                                )}
                             </div>
                         </div>
                     </div>

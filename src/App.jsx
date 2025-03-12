@@ -12,6 +12,8 @@ import BookingForm from './components/Booking/BookingForm';
 import PaymentsPage from './components/Booking/PaymentsPage';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import CarsAdmin from './components/Admin/CarsAdmin';
+import MyBookings from './components/Booking/MyBookings';
+import DriverForm from './components/Driver/DriverForm';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
           <Route path="/payments" element={<PaymentsPage/>} />
           <Route path="/admin-dashboard" element={<AdminDashboard/>} />
           <Route path="/admin-dashboard/cars" element={<CarsAdmin/>} />
+          <Route path="/my-bookings" element={<MyBookings/>} />
+          <Route path="/driver" element={<DriverForm/>} />
         </Routes>
       </div>
     </Router>
