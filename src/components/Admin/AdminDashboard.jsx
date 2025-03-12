@@ -494,6 +494,9 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState("car");
     const [showUserModal, setShowUserModal] = useState(false);
     const [users, setUsers] = useState([]);
+    const [selectedRole, setSelectedRole] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState(""); // Status filter
+        const [selectedModel, setSelectedModel] = useState(""); // Model filter
 
     const [car, setCar] = useState({
         name: "",
@@ -601,26 +604,6 @@ const AdminDashboard = () => {
             alert("Failed to update car!");
         }
     };
-    
-    // const handleDelete = async (carId) => {
-    //     try {
-    //         // Make a DELETE request to delete the car
-    //         await axios.delete(`http://localhost:8080/MegaCity_war_exploded/uploadCarWithImage?carId=${carId}`);
-    //         alert("Car deleted successfully!");
-    //         fetchCars();  // Refresh the car list after deletion
-    //     } catch (error) {
-    //         console.error("Error deleting car:", error);
-    //         alert("Failed to delete car!");
-    //     }
-    // };
-
-    
-
-    // const handleEdit = (carData) => {
-    //     setCar(carData); // Populate the modal form with the selected car data
-    //     setShowModal(true); // Open the modal for editing
-    // };
-
     const addUser = async (e) => {
         e.preventDefault();
         try {
@@ -636,22 +619,6 @@ const AdminDashboard = () => {
             alert("Failed to add user!");
         }
     };
-
-    // const updateUser = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         await axios.put(`http://localhost:8080/MegaCity_war_exploded/users/${user.id}`, user, {
-    //             headers: { "Content-Type": "application/json" }
-    //         });
-    //         alert("User updated successfully!");
-    //         setUser({ username: "", password: "", email: "", phone: "", role: "User" });
-    //         setShowUserModal(false);
-    //         fetchUsers();
-    //     } catch (error) {
-    //         console.error("Error updating user:", error);
-    //         alert("Failed to update user!");
-    //     }
-    // };
 
     const updateUser = async (e) => {
         e.preventDefault();
@@ -701,17 +668,57 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleFilterChange = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/MegaCity_war_exploded/users", {
+                params: {
+                    role: selectedRole || undefined,
+                }
+            });
+
+            if (Array.isArray(response.data)) {
+                setUsers(response.data); // Set users based on the filtered response
+            } else {
+                console.error("Invalid filtered data:", response.data);
+                setUsers([]);
+            }
+        } catch (error) {
+            console.error("Error fetching filtered users:", error);
+        }
+    };
+
+
+    const handleCarFilterChange = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/MegaCity_war_exploded/filteringUserCars", {
+                params: {
+                    status: selectedStatus || undefined,
+                    model: selectedModel || undefined
+                }
+            });
+
+            if (Array.isArray(response.data)) {
+                setCars(response.data); // Set users based on the filtered response
+            } else {
+                console.error("Invalid filtered data:", response.data);
+                setCars([]);
+            }
+        } catch (error) {
+            console.error("Error fetching filtered cars:", error);
+        }
+    };
+
 
     return (
         <div className="d-flex" id="wrapper">
             <div className="bg-dark text-white p-4" id="sidebar" style={{ width: '250px' }}>
                 <h4 className="text-center mb-4">Admin Dashboard</h4>
                 <ul className="nav flex-column">
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <Link to="/admin" className="nav-link text-white">
                             <FaCogs className="me-2" /> Dashboard
                         </Link>
-                    </li>
+                    </li> */}
                     <li className="nav-item">
                     <Link 
                            // to="/admin/addCar" 
@@ -737,22 +744,147 @@ const AdminDashboard = () => {
                     
                 </ul>
             </div>
-            {activeTab === "car" && (
+            {/* {activeTab === "car" && (
             <div id="page-content-wrapper" className="container-fluid p-4">
                 <h2 className="text-center mb-4">Admin Dashboard</h2>
                 <div className="card shadow-sm mt-4">
                     <div className="card-header bg-info text-white">
                         <h5>Cars List</h5>
                     </div>
-                    <div className="mt-3 ml-3">
-                    <Button variant="primary" style={{ width: "150px",marginLeft:10 }} onClick={() => setShowModal(true)}>
+                    <div className="row mb-5">
+                    <div className="col-md-2 mt-3 ml-3">
+                    <Button variant="primary" style={{ width: "150px"}} onClick={() => setShowModal(true)}>
                      + Add Car
                     </Button>
                 </div>
-
+                <div className="col-md-3 mt-3">
+                <select 
+                        className="form-select" 
+                        value={selectedStatus} 
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                    >
+                        <option value="">All Status</option>
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                    </select>
+                </div>
+                <div className="col-md-3 mt-3">
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Filter by Model..." 
+                        value={selectedModel}
+                        onChange={(e) => setSelectedModel(e.target.value)}
+                    />
+                </div>
+                <div className="col-md-2 mt-3">
+                    <button className="btn btn-primary w-100" onClick={handleCarFilterChange}>
+                        Apply Filters
+                    </button>
+                </div>
+                <div className="col-md-2 mt-3">
+                    <button 
+                        className="btn btn-secondary w-100" 
+                        onClick={() => {
+                            setSelectedStatus("");
+                            setSelectedModel("");
+                            handleCarFilterChange();
+                        }}
+                    >
+                        Clear Filters
+                    </button>
+                </div>
+                </div>
                     <div className="card-body">
                         
                         <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Model</th>
+                                    <th>Plate Number</th>
+                                    <th>Year</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {cars.length > 0 ? cars.map((cardet, index) => (
+                                    <tr key={index}>
+                                        <td>{cardet.name}</td>
+                                        <td>{cardet.model}</td>
+                                        <td>{cardet.plate_number}</td>
+                                        <td>{cardet.year}</td>
+                                        <td>{cardet.status}</td>
+                                        
+                                          <td>
+                                        <button className="btn btn-warning btn-sm" onClick={() => handleEdit(cardet, "car")}>Edit</button>
+                                        <button className="btn btn-danger btn-sm ms-2" onClick={() => handleDelete(cardet.id, "car")}>Delete</button>
+                                    </td>
+                                    </tr>
+                                )) : (
+                                    <tr>
+                                        <td colSpan="5" className="text-center">No cars added yet.</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            )} */}
+
+
+
+{activeTab === "car" && (
+                <div id="page-content-wrapper" className="container-fluid p-4">
+                    <h2 className="text-center mb-4">Manage Cars</h2>
+                    <div className="row mb-3">
+                   <div className="col-md-2">
+                    {/* <Button variant="primary" onClick={() => setShowUserModal(true)}>+ Add User</Button> */}
+                    <Button variant="primary"  onClick={() => setShowModal(true)}>
+                     + Add Car
+                    </Button>
+                    </div>
+                    <div className="col-md-3">
+                <select 
+                        className="form-select" 
+                        value={selectedStatus} 
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                    >
+                        <option value="">All Status</option>
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                    </select>
+                </div>
+                <div className="col-md-3">
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Filter by Model..." 
+                        value={selectedModel}
+                        onChange={(e) => setSelectedModel(e.target.value)}
+                    />
+                </div>
+                <div className="col-md-2">
+                    <button className="btn btn-primary w-100" onClick={handleCarFilterChange}>
+                        Apply Filters
+                    </button>
+                </div>
+                <div className="col-md-2">
+                    <button 
+                        className="btn btn-secondary w-100" 
+                        onClick={() => {
+                            setSelectedStatus("");
+                            setSelectedModel("");
+                            handleCarFilterChange();
+                        }}
+                    >
+                        Clear Filters
+                    </button>
+                </div>
+                </div>
+                <table className="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -787,15 +919,47 @@ const AdminDashboard = () => {
                                 )}
                             </tbody>
                         </table>
-                    </div>
                 </div>
-            </div>
             )}
+
+
 
 {activeTab === "user" && (
                 <div id="page-content-wrapper" className="container-fluid p-4">
                     <h2 className="text-center mb-4">Manage Users</h2>
+                    <div className="row mb-3">
+                   <div className="col-md-4">
                     <Button variant="primary" onClick={() => setShowUserModal(true)}>+ Add User</Button>
+                    </div>
+                    <div className="col-md-4">
+                    <select 
+                        className="form-select" 
+                        value={selectedRole} 
+                        onChange={(e) => setSelectedRole(e.target.value)}
+                    >
+                        <option value="">All Roles</option>
+                        <option value="customer">customer</option>
+                        <option value="driver">driver</option>
+                        {/* <option value="Unavailable">Unavailable</option> */}
+                    </select>
+                </div>
+                <div className="col-md-2">
+                    <button className="btn btn-primary w-100" onClick={handleFilterChange}>
+                        Apply Filters
+                    </button>
+                </div>
+                <div className="col-md-2">
+                    <button 
+                        className="btn btn-secondary w-100" 
+                        onClick={() => {
+                            setSelectedRole("");
+                            handleFilterChange();
+                        }}
+                    >
+                        Clear Filters
+                    </button>
+                </div>
+                </div>
                     <table className="table table-bordered mt-4">
                         <thead>
                             <tr>

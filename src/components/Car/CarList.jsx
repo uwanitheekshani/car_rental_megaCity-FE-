@@ -1,111 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import { Link } from "react-router-dom";
-
-// const CarList = () => {
-//     const [cars, setCars] = useState([]);
-
-//     useEffect(() => {
-//         // Fetch all cars from the backend
-//         axios.get("http://localhost:8080/MegaCity_war_exploded/uploadCarWithImage")
-//             .then(response => setCars(response.data))
-//             .catch(error => console.error("There was an error fetching the cars:", error));
-//     }, []);
-
-//     return (
-//         <div className="container">
-//             <h2>Available Cars</h2>
-//             <div className="row">
-//                 {cars.map(car => (
-//                     <div key={car.id} className="col-md-4">
-//                         <div className="card">
-//                             <img src="" className="card-img-top" alt={car.name} />
-//                             <div className="card-body">
-//                                 <h5 className="card-title">{car.name}</h5>
-//                                 <p className="card-text">{car.model} - {car.year}</p>
-//                                 <Link to={`/car/${car.id}`} className="btn btn-primary">View Details</Link>
-//                             </div>
-//                         </div>
-//                     </div>
-//                 ))}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default CarList;
-
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import { Link } from "react-router-dom";
-// import '../../Styles/CarList.css'; // For custom styling
-
-// import image5 from '../../assets/images/car-1.jpg';
-// import image6 from '../../assets/images/car-2.jpg';
-// import image7 from '../../assets/images/car-3.jpg';
-// import image8 from '../../assets/images/car-4.jpg';
-// import image1 from '../../assets/images/car-5.jpg';
-// import image2 from '../../assets/images/car-6.jpg';
-// import image3 from '../../assets/images/car-7.jpg';
-// import image4 from '../../assets/images/car-8.jpg';
-
-// const CarList = () => {
-//     const [cars, setCars] = useState([]);
-//     const [loading, setLoading] = useState(true);
-
-//     useEffect(() => {
-//         // Fetch all cars from the backend
-//         axios.get("http://localhost:8080/MegaCity_war_exploded/uploadCarWithImage")
-//             .then(response => {
-//                 setCars(response.data);
-//                 setLoading(false);
-//             })
-//             .catch(error => {
-//                 console.error("There was an error fetching the cars:", error);
-//                 setLoading(false);
-//             });
-//     }, []);
-
-//     if (loading) {
-//         return (
-//             <div className="loading-container">
-//                 <div className="loader">Loading...</div>
-//             </div>
-//         );
-//     }
-
-//     return (
-//         <div className="container py-5">
-//             <h2 className="text-center mb-4">Available Cars</h2>
-//             <div className="row row-cols-1 row-cols-md-3 g-4">
-//                 {cars.map(car => {
-//                     // Assign images dynamically from the /src/images folder
-//                     // const imagePath = require(`./images/${car.id}.jpg`); // Assuming the car name matches the image filename
-//                     // const imagePath = require(`../../assets/images/${car.id}.jpg`); 
-//                     return (
-//                         <div key={car.id} className="col">
-//                             <div className="card shadow-lg rounded">
-//                                 <img 
-//                                     // src={imagePath} 
-//                                     className="card-img-top car-image" 
-//                                     alt={car.name} 
-//                                 />
-//                                 <div className="card-body">
-//                                     <h5 className="card-title">{car.name}</h5>
-//                                     <p className="card-text">{car.model} - {car.year}</p>
-//                                     <Link to={`/car/${car.id}`} className="btn btn-primary btn-block">View Details</Link>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     );
-//                 })}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default CarList;
-
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -127,6 +19,9 @@ import image4 from '../../assets/images/car-8.jpg';
 const CarList = () => {
     const [cars, setCars] = useState([]);
     const navigate = useNavigate();
+    // const [filteredCars, setFilteredCars] = useState([]);
+    const [selectedStatus, setSelectedStatus] = useState(""); // Status filter
+    const [selectedModel, setSelectedModel] = useState(""); // Model filter
 
     useEffect(() => {
         // Fetch all cars from the backend
@@ -150,6 +45,56 @@ const CarList = () => {
         image5
     ];
 
+
+    // useEffect(() => {
+    //     fetchCars();
+    // }, []);
+
+    // const fetchCars = () => {
+    //     let url = "http://localhost:8080/MegaCity_war_exploded/filteringUserCars";
+    //     let params = {};
+
+    //     if (status) params.status = status;
+    //     if (model) params.model = model;
+
+    //     axios
+    //         .get(url, { params })
+    //         .then((response) => {
+                
+    //             const carsWithImages = response.data.map((car, index) => ({
+    //                 ...car,
+    //                 imageUrl: car.imageUrl || imagePool[index % imagePool.length],
+    //             }));
+    //             setCars(carsWithImages);
+    //         })
+    //         .catch((error) => console.error("Error fetching cars:", error));
+    // };
+
+     // Fetch filtered cars when button is clicked
+     const handleFilterChange = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/MegaCity_war_exploded/filteringUserCars", {
+                params: {
+                    status: selectedStatus || undefined,
+                    model: selectedModel || undefined
+                }
+            });
+
+            if (Array.isArray(response.data)) {
+                const carsWithValidImages = response.data.map((car, index) => ({
+                    ...car,
+                    imageUrl: car.imageUrl || imagePool[index % imagePool.length]
+                }));
+                setCars(carsWithValidImages);
+            } else {
+                console.error("Invalid filtered data:", response.data);
+                setCars([]);
+            }
+        } catch (error) {
+            console.error("Error fetching filtered cars:", error);
+        }
+    };
+
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-end">
@@ -159,11 +104,56 @@ const CarList = () => {
             </div>
             <h2 className="text-center mb-4">🚗 Available Cars for Rent</h2>
 
+
+               {/* Filter Controls */}
+               <div className="row mb-3">
+                <div className="col-md-4">
+                    <select 
+                        className="form-select" 
+                        value={selectedStatus} 
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                    >
+                        <option value="">All Status</option>
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                    </select>
+                </div>
+
+                <div className="col-md-4">
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Filter by Model..." 
+                        value={selectedModel}
+                        onChange={(e) => setSelectedModel(e.target.value)}
+                    />
+                </div>
+
+                <div className="col-md-2">
+                    <button className="btn btn-primary w-100" onClick={handleFilterChange}>
+                        Apply Filters
+                    </button>
+                </div>
+
+                <div className="col-md-2">
+                    <button 
+                        className="btn btn-secondary w-100" 
+                        onClick={() => {
+                            setSelectedStatus("");
+                            setSelectedModel("");
+                            handleFilterChange();
+                        }}
+                    >
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
+
+
             <div className="row">
                 {cars.map(car => (
                     <div key={car.id} className="col-md-4 mb-4">
                         <div className="card shadow-lg border-0">
-                            {/* Display car image */}
                             <img
                                 src={car.imageUrl}
                                 className="card-img-top"

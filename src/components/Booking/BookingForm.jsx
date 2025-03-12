@@ -113,14 +113,14 @@ const BookingForm = () => {
     };
 
     // Handle booking delete
-    const handleDeleteBooking = (id) => {
-        axios.delete(`http://localhost:8080/MegaCity_war_exploded/booking?id=${id}`)
-            .then(() => {
-                alert("Booking deleted successfully!");
-                refreshBookings();
-            })
-            .catch(error => console.error("Error deleting booking:", error));
-    };
+    // const handleDeleteBooking = (id) => {
+    //     axios.delete(`http://localhost:8080/MegaCity_war_exploded/booking?id=${id}`)
+    //         .then(() => {
+    //             alert("Booking deleted successfully!");
+    //             refreshBookings();
+    //         })
+    //         .catch(error => console.error("Error deleting booking:", error));
+    // };
 
     if (!car) return <div>Loading car details...</div>;
 
@@ -185,8 +185,15 @@ const BookingForm = () => {
                             <td>RS.{booking.totalAmount}</td>
                             <td>{booking.status}</td>
                             <td>
-                                <Button variant="warning" onClick={() => handleEditBooking(booking)}>Edit</Button>
-                                <Button variant="danger" className="ms-2" onClick={() => handleDeleteBooking(booking.id)}>Delete</Button>
+                            <Button 
+                                    variant="warning" 
+                                    onClick={() => handleEditBooking(booking)}
+                                    disabled={booking.status !== "pending"}
+                                >
+                                    Edit
+                                </Button>
+                                {/* <Button variant="warning" onClick={() => handleEditBooking(booking)}>Edit</Button> */}
+                                {/* <Button variant="danger" className="ms-2" onClick={() => handleDeleteBooking(booking.id)}>Delete</Button> */}
                             </td>
                         </tr>
                     ))}
