@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FaCar, FaUser, FaCogs } from 'react-icons/fa';
+import { FaCar, FaUser, FaCalendarCheck, FaMoneyBillWave } from 'react-icons/fa';
 import { Button, Modal, Form } from "react-bootstrap";
 
 const AdminDashboard = () => {
@@ -358,7 +358,7 @@ const AdminDashboard = () => {
                             className={`nav-link text-white ${activeTab === "booking" ? "active" : ""}`}
                             onClick={() => setActiveTab("booking")}
                         >
-                            <FaUser className="me-2" />
+                            <FaCalendarCheck className="me-2" />
                             Manage Bookings
                         </Link>
                     </li>
@@ -369,7 +369,7 @@ const AdminDashboard = () => {
                             className={`nav-link text-white ${activeTab === "payment" ? "active" : ""}`}
                             onClick={() => setActiveTab("payment")}
                         >
-                            <FaUser className="me-2" />
+                            <FaMoneyBillWave className="me-2" />
                             View Payments
                         </Link>
                     </li>

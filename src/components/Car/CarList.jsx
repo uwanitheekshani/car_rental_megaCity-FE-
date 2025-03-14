@@ -63,30 +63,6 @@ const CarList = () => {
     ];
 
 
-    // useEffect(() => {
-    //     fetchCars();
-    // }, []);
-
-    // const fetchCars = () => {
-    //     let url = "http://localhost:8080/MegaCity_war_exploded/filteringUserCars";
-    //     let params = {};
-
-    //     if (status) params.status = status;
-    //     if (model) params.model = model;
-
-    //     axios
-    //         .get(url, { params })
-    //         .then((response) => {
-                
-    //             const carsWithImages = response.data.map((car, index) => ({
-    //                 ...car,
-    //                 imageUrl: car.imageUrl || imagePool[index % imagePool.length],
-    //             }));
-    //             setCars(carsWithImages);
-    //         })
-    //         .catch((error) => console.error("Error fetching cars:", error));
-    // };
-
      // Fetch filtered cars when button is clicked
      const handleFilterChange = async () => {
         try {
